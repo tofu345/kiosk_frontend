@@ -24,11 +24,14 @@
 		let response;
 		try {
 			response = await axios.get(input);
+			disabled = false;
 			if (response.status !== 200 || !response.data?.kiosk) {
+				console.error(response);
 				return setError(`invalid content management system response\n ${highlight(response)}`);
 			}
 		} catch (error) {
-			return setError(`${input} returned\n${highlight(error.response)}`);
+			disabled = false;
+			return setError(`${input} returned\n${highlight(error)}`);
 		}
 
 		let result = KioskSchema.safeParse(response.data?.kiosk);
@@ -50,7 +53,6 @@
 		}
 
 		kiosk = null;
-		disabled = false;
 	}
 </script>
 
